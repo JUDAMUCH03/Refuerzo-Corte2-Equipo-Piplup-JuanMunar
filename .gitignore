@@ -1,6 +1,46 @@
+# Compilación y empaquetado Maven
 target/
-.idea/
-.vscode/
 *.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Reportes y logs de ejecución
 *.log
+*.exec
+*.dump
+*.dumpstream
+
+# JaCoCo y análisis estático local
+target/site/jacoco/
+.sonar/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# Archivos de sistema operativo (macOS / Windows / Linux)
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini

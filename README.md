@@ -1,2 +1,3 @@
-# Refuerzo-Corte2-Equipo-Piplup-JuanMunar
-Ejercicios de refuerzo del equipo Piplup de la materia DOSW
+# Aquaport
+
+Proyecto Java Maven para la gestión de misiones y flota de drones acuáticos.

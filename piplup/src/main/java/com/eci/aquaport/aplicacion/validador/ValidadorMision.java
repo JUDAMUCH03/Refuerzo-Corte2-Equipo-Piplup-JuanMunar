@@ -1,35 +1,44 @@
 package com.eci.aquaport.aplicacion.validador;
 
 import com.eci.aquaport.dominio.modelo.DroneAcuatico;
-import com.eci.aquaport.dominio.modelo.Mision;
+import java.util.Set;
 
 public class ValidadorMision {
 
-    public boolean tieneBateriaSuficiente(DroneAcuatico drone) {
-        return drone != null && drone.bateria() >= 35;
-    }
+    private static final int BATERIA_MINIMA_OPERATIVA = 35;
+    
+    // Zonas acuáticas habilitadas en el campus ECI
+    private static final Set<String> ZONAS_PERMITIDAS = Set.of(
+            "Embalse Norte",
+            "Canal Central",
+            "Laguna Sur",
+            "Punto Ribereño Este",
+            "Muelle Principal"
+    );
 
-    public boolean puedeOperarEnZona(DroneAcuatico drone, String zona) {
-        if (drone == null || zona == null || zona.isBlank()) {
+    public boolean tieneBateriaSuficiente(DroneAcuatico drone) {
+        if (drone == null) {
             return false;
         }
-        return drone.disponible() && drone.zona() != null && drone.zona().equalsIgnoreCase(zona.trim());
+        return drone.bateria() >= BATERIA_MINIMA_OPERATIVA;
     }
 
-    public void validarAsignacion(Mision mision) {
-        if (mision == null) {
-            throw new IllegalArgumentException("La misión no puede ser nula.");
-        }
-
-        DroneAcuatico drone = mision.getDrone();
+    public boolean estaDisponible(DroneAcuatico drone) {
         if (drone == null) {
-            throw new IllegalStateException("La misión debe tener un drone asociado.");
+            return false;
         }
-        if (!tieneBateriaSuficiente(drone)) {
-            throw new IllegalStateException("El drone no tiene batería suficiente para asignar la misión.");
+        return drone.disponible();
+    }
+
+    public void validarPuntoLlegada(String puntoLlegada) {
+        if (puntoLlegada == null || puntoLlegada.isBlank()) {
+            throw new IllegalArgumentException("El punto de llegada no puede ser nulo ni vacío");
         }
-        if (!puedeOperarEnZona(drone, mision.getPuntoPartida())) {
-            throw new IllegalStateException("El drone no puede operar en la zona de salida especificada.");
+    }
+
+    public void validarZona(String zona) {
+        if (zona == null || !ZONAS_PERMITIDAS.contains(zona.trim())) {
+            throw new IllegalArgumentException("Zona no autorizada para operaciones acuáticas: " + zona);
         }
     }
 }

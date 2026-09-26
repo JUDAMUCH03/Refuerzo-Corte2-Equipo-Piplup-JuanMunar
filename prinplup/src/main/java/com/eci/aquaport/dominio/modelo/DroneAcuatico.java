@@ -9,76 +9,48 @@ public class DroneAcuatico {
     private final int bateria;
     private final EstadoDrone estado;
     private final String zona;
+    private final int capacidadCargaGramos;
 
-    // Constructor principal v2
-    public DroneAcuatico(String id, String tipo, int bateria, EstadoDrone estado, String zona) {
+    public DroneAcuatico(String id, String tipo, int bateria, EstadoDrone estado, String zona, int capacidadCargaGramos) {
         this.id = id;
         this.tipo = tipo;
         this.bateria = bateria;
         this.estado = estado;
         this.zona = zona;
+        this.capacidadCargaGramos = capacidadCargaGramos;
     }
 
-    // Constructor sobrecargado para retrocompatibilidad con v1
+    public DroneAcuatico(String id, String tipo, int bateria, EstadoDrone estado, String zona) {
+        this(id, tipo, bateria, estado, zona, 500);
+    }
+
     public DroneAcuatico(String id, String tipo, int bateria, boolean disponible, String zona) {
-        this(id, tipo, bateria, disponible ? EstadoDrone.DISPONIBLE : EstadoDrone.MANTENIMIENTO, zona);
+        this(id, tipo, bateria, disponible ? EstadoDrone.DISPONIBLE : EstadoDrone.MANTENIMIENTO, zona, 500);
     }
 
-    public String id() {
-        return id;
-    }
+    public String id() { return id; }
+    public String getId() { return id; }
 
-    public String getId() {
-        return id;
-    }
+    public String tipo() { return tipo; }
+    public String getTipo() { return tipo; }
 
-    public String tipo() {
-        return tipo;
-    }
+    public int bateria() { return bateria; }
+    public int getBateria() { return bateria; }
 
-    public String getTipo() {
-        return tipo;
-    }
+    public EstadoDrone estado() { return estado; }
+    public EstadoDrone getEstado() { return estado; }
 
-    public int bateria() {
-        return bateria;
-    }
+    public String zona() { return zona; }
+    public String getZona() { return zona; }
 
-    public int getBateria() {
-        return bateria;
-    }
+    public int capacidadCargaGramos() { return capacidadCargaGramos; }
+    public int getCapacidadCargaGramos() { return capacidadCargaGramos; }
 
-    public EstadoDrone estado() {
-        return estado;
-    }
+    public boolean disponible() { return this.estado == EstadoDrone.DISPONIBLE; }
+    public boolean isDisponible() { return this.estado == EstadoDrone.DISPONIBLE; }
 
-    public EstadoDrone getEstado() {
-        return estado;
-    }
-
-    public String zona() {
-        return zona;
-    }
-
-    public String getZona() {
-        return zona;
-    }
-
-    public boolean disponible() {
-        return this.estado == EstadoDrone.DISPONIBLE;
-    }
-
-    public boolean isDisponible() {
-        return this.estado == EstadoDrone.DISPONIBLE;
-    }
-
-    public String modelo() {
-        return this.tipo;
-    }
-
-    public String getModelo() {
-        return this.tipo;
-    }
+    public String modelo() { return this.tipo; }
+    public String getModelo() { return this.tipo; }
 
     @Override
     public boolean equals(Object o) {
@@ -86,6 +58,7 @@ public class DroneAcuatico {
         if (o == null || getClass() != o.getClass()) return false;
         DroneAcuatico that = (DroneAcuatico) o;
         return bateria == that.bateria &&
+                capacidadCargaGramos == that.capacidadCargaGramos &&
                 Objects.equals(id, that.id) &&
                 Objects.equals(tipo, that.tipo) &&
                 estado == that.estado &&
@@ -94,17 +67,6 @@ public class DroneAcuatico {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, tipo, bateria, estado, zona);
-    }
-
-    @Override
-    public String toString() {
-        return "DroneAcuatico{" +
-                "id='" + id + '\'' +
-                ", tipo='" + tipo + '\'' +
-                ", bateria=" + bateria +
-                ", estado=" + estado +
-                ", zona='" + zona + '\'' +
-                '}';
+        return Objects.hash(id, tipo, bateria, estado, zona, capacidadCargaGramos);
     }
 }

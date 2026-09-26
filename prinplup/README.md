@@ -42,10 +42,13 @@ gitGraph
    merge hotfix/fix-bateria-critica tag: "v2.0.1"
    checkout develop
    merge hotfix/fix-bateria-critica
+   ```
 
 ---
 
-## Principios SOLID 
+## Auditoría de Principios SOLID — Versión 2.0 (Prinplup)
+
+Se realizó la auditoría técnica de diseño sobre las nuevas clases del módulo `prinplup`, garantizando mantenibilidad, extensibilidad e inmunidad a regresiones:
 
 ### 1. Single Responsibility Principle (SRP)
 * **Clases:** `FabricaDrones`, `AsignadorAutomatico`, `AnalizadorFlotaAvanzado`.

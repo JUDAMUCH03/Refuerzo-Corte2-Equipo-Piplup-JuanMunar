@@ -82,4 +82,30 @@ class ValidadorMisionTest {
         
         assertTrue(ex.getMessage().contains("Zona no autorizada"));
     }
+
+    @Test
+    @DisplayName("7. Punto de llegada válido no lanza ninguna excepción")
+    void puntoLlegadaValido_noLanzaExcepcion() {
+        assertDoesNotThrow(() -> validador.validarPuntoLlegada("Laboratorio Hídrico Central"));
+    }
+
+    @Test
+    @DisplayName("8. Zona hídrica permitida no lanza ninguna excepción")
+    void zonaValida_noLanzaExcepcion() {
+        assertDoesNotThrow(() -> validador.validarZona("Embalse Norte"));
+    }
+
+    @Test
+    @DisplayName("9. Drone disponible retorna true")
+    void droneDisponible_retornaTrue() {
+        DroneAcuatico drone = new DroneAcuatico("AR-04", "Aqua-Ranger 100", 75, true, "Punto Ribereño Este");
+        assertTrue(validador.estaDisponible(drone));
+    }
+
+    @Test
+    @DisplayName("10. Drone nulo retorna false en verificaciones sin lanzar NullPointerException")
+    void droneNulo_retornaFalse() {
+        assertFalse(validador.tieneBateriaSuficiente(null));
+        assertFalse(validador.estaDisponible(null));
+    }
 }

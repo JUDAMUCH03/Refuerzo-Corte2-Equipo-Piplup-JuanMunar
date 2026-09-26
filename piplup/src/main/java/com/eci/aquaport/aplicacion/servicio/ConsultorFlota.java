@@ -5,80 +5,76 @@ import com.eci.aquaport.dominio.modelo.DroneAcuatico;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConsultorFlota {
 
-    /**
-     * Consulta 1: Drones disponibles con bateria >= 35%, ordenados de mayor a menor bateria.
-     */
-    public List<DroneAcuatico> obtenerDisponiblesOperativosOrdenados(List<DroneAcuatico> flota) {
-        List<DroneAcuatico> dronesOperativos = flota.stream().filter(drone -> drone.disponible() && drone.bateria() >= 35)
+    private static final Logger LOGGER = Logger.getLogger(ConsultorFlota.class.getName());
+    private static final String MODELO_DEFECTO = "Aqua-Ranger 100";
+    private static final int BATERIA_MINIMA = 35;
+
+    // Consulta 1: Drones disponibles con bateria >= 35%, ordenados de mayor a menor bateria
+    public List<DroneAcuatico> obtenerDisponiblesBateriaDesc(List<DroneAcuatico> flota) {
+        return flota.stream()
+                .filter(DroneAcuatico::disponible)
+                .filter(d -> d.bateria() >= BATERIA_MINIMA)
                 .sorted(Comparator.comparingInt(DroneAcuatico::bateria).reversed())
                 .toList();
-        return dronesOperativos;
     }
 
-    /**
-     * Consulta 2: Solo los IDs de los drones disponibles.
-     */
-    public List<String> obtenerIdsDronesDisponibles(List<DroneAcuatico> flota) {
-        return flota.stream().filter(drone -> drone.disponible()).map(DroneAcuatico::id).toList();
+    // Consulta 2: Solo los IDs de los drones disponibles
+    public List<String> obtenerIdsDisponibles(List<DroneAcuatico> flota) {
+        return flota.stream()
+                .filter(DroneAcuatico::disponible)
+                .map(DroneAcuatico::id)
+                .toList();
     }
 
-    /**
-     * Consulta 3: Verifica si existe algun drone disponible con bateria >= 35%.
-     */
-    public boolean existeDisponibleOperativo(List<DroneAcuatico> flota) {
-        boolean existeDron = flota.stream().anyMatch(droneAcuatico -> droneAcuatico.bateria() >= 35 && droneAcuatico.disponible());
-        return existeDron;
+    // Consulta 3: Verifica si existe algun drone disponible con bateria >= 35%
+    public boolean existeDisponibleBateriaSuficiente(List<DroneAcuatico> flota) {
+        return flota.stream()
+                .anyMatch(d -> d.disponible() && d.bateria() >= BATERIA_MINIMA);
     }
 
-    /**
-     * Consulta 4: Cantidad total de drones disponibles.
-     */
-    public long contarDronesDisponibles(List<DroneAcuatico> flota) {
-        long numDrones = flota.stream().filter(DroneAcuatico::disponible).count();
-        return numDrones;
+    // Consulta 4: Cuenta cuantos drones estan disponibles
+    public long contarDisponibles(List<DroneAcuatico> flota) {
+        return flota.stream()
+                .filter(DroneAcuatico::disponible)
+                .count();
     }
 
-    /**
-     * Consulta 5: Drone con la mayor bateria de toda la flota.
-     */
-    public Optional<DroneAcuatico> obtenerDroneConMayorBateria(List<DroneAcuatico> flota) {
-        Optional<DroneAcuatico> maxDrone = flota.stream().max(Comparator.comparingInt(DroneAcuatico::bateria));
-        return maxDrone;
+    // Consulta 5: Obtiene el drone con mayor bateria de toda la flota
+    public Optional<DroneAcuatico> obtenerConMayorBateria(List<DroneAcuatico> flota) {
+        return flota.stream()
+                .max(Comparator.comparingInt(DroneAcuatico::bateria));
     }
 
     public static void main(String[] args) {
         ConsultorFlota consultor = new ConsultorFlota();
 
         List<DroneAcuatico> flota = List.of(
-            new DroneAcuatico("AR-01", "Aqua-Ranger 100", 92, true,  "Embalse Norte"),
-            new DroneAcuatico("AR-02", "Aqua-Ranger 100", 45, true,  "Canal Central"),
-            new DroneAcuatico("AR-03", "Aqua-Ranger 100", 18, false, "Laguna Sur"),
-            new DroneAcuatico("AR-04", "Aqua-Ranger 100", 73, true,  "Punto Ribereño Este")
+                new DroneAcuatico("AR-01", MODELO_DEFECTO, 92, true, "Embalse Norte"),
+                new DroneAcuatico("AR-02", MODELO_DEFECTO, 45, true, "Canal Central"),
+                new DroneAcuatico("AR-03", MODELO_DEFECTO, 18, false, "Laguna Sur"),
+                new DroneAcuatico("AR-04", MODELO_DEFECTO, 73, true, "Punto Ribereño Este")
         );
 
-        System.out.println("--- PRUEBAS CONSULTOR FLOTA (PIPLUP) ---");
-        
-        // 1.
-        System.out.println("1. Disponibles >= 35% ordenados desc:");
-        System.out.println(consultor.obtenerDisponiblesOperativosOrdenados(flota));
+        LOGGER.info("=== REPORTE DE CONSULTAS DE FLOTA AQUAPORT ===");
 
-        // 2.
-        System.out.println("2. IDs de disponibles:");
-        System.out.println(consultor.obtenerIdsDronesDisponibles(flota));
+        LOGGER.log(Level.INFO, "1. Drones disponibles (bateria >= 35%) desc: {0}",
+                consultor.obtenerDisponiblesBateriaDesc(flota));
 
-        // 3.
-        System.out.println("3. ¿Existe disponible >= 35%?:");
-        System.out.println(consultor.existeDisponibleOperativo(flota));
+        LOGGER.log(Level.INFO, "2. IDs de drones disponibles: {0}",
+                consultor.obtenerIdsDisponibles(flota));
 
-        // 4.
-        System.out.println("4. Conteo de disponibles:");
-        System.out.println(consultor.contarDronesDisponibles(flota));
+        LOGGER.log(Level.INFO, "3. Existe disponible con bateria suficiente: {0}",
+                consultor.existeDisponibleBateriaSuficiente(flota));
 
-        // 5.
-        System.out.println("5. Drone con mayor batería:");
-        System.out.println(consultor.obtenerDroneConMayorBateria(flota));
+        LOGGER.log(Level.INFO, "4. Cantidad de drones disponibles: {0}",
+                consultor.contarDisponibles(flota));
+
+        LOGGER.log(Level.INFO, "5. Drone con mayor bateria: {0}",
+                consultor.obtenerConMayorBateria(flota).orElse(null));
     }
 }

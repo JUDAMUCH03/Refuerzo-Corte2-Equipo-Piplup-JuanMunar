@@ -12,6 +12,7 @@
 
     <modules>
         <module>piplup</module>
+        <module>prinplup</module>
     </modules>
 
     <build>
